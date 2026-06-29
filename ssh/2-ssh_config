@@ -1,0 +1,4 @@
+# SSH client configuration to connect securely via key pair
+Host *
+    IdentityFile ~/.ssh/school
+    PasswordAuthentication no
