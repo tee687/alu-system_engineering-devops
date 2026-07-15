@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Configures Nginx to add a custom header X-Served-By with the server's hostname
+# shellcheck disable=SC2154
+
+# Update packages and install Nginx
+apt-get update -y
+apt-get install -y nginx
+
+# Add custom header configuration inside the Nginx default site config
+# We target 'server_name _;' and insert the add_header line right below it
+sed -i "s|server_name _;|$redirect_rule\n\tserver_name _;\n\tadd_header X-Served-By \$hostname;|" /etc/nginx/sites-available/default
+
+# Restart Nginx to apply changes
+service nginx restart
