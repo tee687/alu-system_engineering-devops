@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Configures Nginx to redirect /redirect_me to a YouTube video with a 301 redirect
+
+apt-get update -y
+apt-get install -y nginx
+
+# Overwrite the default config to ensure the redirect works cleanly
+cat << 'CONFIG_EOF' > /etc/nginx/sites-available/default
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server ipv6only=on;
+
+    root /usr/share/nginx/html;
+    index index.html index.htm;
+
+    server_name _;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+}
+CONFIG_EOF
+
+service nginx restart
